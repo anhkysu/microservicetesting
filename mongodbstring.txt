@@ -1,0 +1,2 @@
+mongodb+srv://akysu:<password>@aks01-ghsgg.gcp.mongodb.net/test?retryWrites=true&w=majority
+trinhkhanh
