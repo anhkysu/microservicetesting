@@ -4,7 +4,7 @@ var plugin = function (options) {
     /**
     * Fetch the list of all the products.
     */
-    seneca.add({ area: "product", action: "fetch" }, function (args,
+    seneca.add(" area: product, action: fetch" , function (args,
         done) {
         var products = this.make("products");
         products.list$({}, done);
@@ -91,32 +91,37 @@ var Seneca  = require("seneca");
 var Express = require("express");
 var Web     = require("seneca-web");
 
-var seneca = Seneca();
+var seneca = Seneca().client({
+    host: "192.168.10.4",
+    port: 8080
+    });;
 var server = Express();
 
 seneca.use(plugin);
+seneca.use('entity');
 seneca.use("mongo-store", {
-   uri: "mongodb://127.0.0.1:27017/seneca"
+    name: 'seneca',
+    host: '127.0.0.1',
+    port: 27017
 });
 
-var config = {
-    routes:{
-        prefix: '/products',
-        pin: { area: 'product', action: '*' },
-        map: {
-            fetch: { GET: true },
-            edit: { GET: false, POST: true },
-            delete: { GET: false, DELETE: true }
-        }
-    }
-};
-
-
-
 seneca.ready(function (err) {
-
-    
+    var config = {
+        routes:{
+            prefix: '/products',
+            pin: "area:product,action:* ",
+            map: {
+                fetch: { GET: true },
+                edit: { GET: false, POST: true },
+                delete: { GET: false, DELETE: true }
+            }
+        }
+    };
+    server.use(require("body-parser").json());
     seneca.use(Web, { adapter: require('seneca-web-adapter-express'), context: server });
     seneca.act('role:web', config);
-    app.listen(3000);
+    seneca.act("area:product,action:add,category:kaka, name:hehe, description:okok,price:1000" , function (err,msg) {
+        console.log(msg);
+    });
+    server.listen(3000);
 });
