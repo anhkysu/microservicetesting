@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mongodb": "^3.3.2",
-    "pm2": "^3.5.1",
+    "pm2": "^5.2.0",
     "seneca": "^3.16.0",
     "seneca-entity": "^5.1.2",
     "seneca-mongo-store": "^1.4.1",
